@@ -1,4 +1,23 @@
 'use strict';
+
+/* config */
+const SASS_SCSS_PATH = './src/sass/*.sass';
+const CSS_PATH = './dist/css/';
+const SRC_IMAGES = './src/images/**/*.+(ico|svg|png|jpg|webp)';
+const DIST_IMAGES = './dist/images/';
+const AUTOPREFIXER_BROWSERS = [
+    'ie >= 10',
+    'ie_mob >= 10',
+    'ff >= 30',
+    'chrome >= 34',
+    'safari >= 7',
+    'opera >= 23',
+    'ios >= 7',
+    'android >= 4.4',
+    'bb >= 10'
+];
+/* end config */
+
 let gulp = require('gulp'),
     bs = require('browser-sync'),
     sass = require('gulp-sass'),
@@ -16,18 +35,57 @@ let gulp = require('gulp'),
     webp = require('imagemin-webp'),
     extReplace = require("gulp-ext-replace"),
     // responsive = require('gulp-responsive'),//https://www.npmjs.com/package/gulp-responsive
-    // clean = require('gulp-clean'),
+    clean = require('gulp-clean'),
     $ = require('gulp-load-plugins')(),
     image = require('gulp-image');
 
-gulp.task('transfer', function () {
-    gulp.src(['./src/img/**/*.+(ico|svg|png)'])
+
+
+gulp.task('default', ['serve']);
+
+// Static Server + watching scss/html files
+gulp.task('serve', ['pages', 'sass', 'js', 'transferImg'], function () {
+    bs.init({ // browser sync
+        server: "./dist"
+    });
+    gulp.watch(SASS_SCSS_PATH, ['sass']);
+    gulp.watch("./src/js/**/*.js", ['js']).on('change', bs.reload);
+    gulp.watch("./src/**/*.html", ['pages']).on('change', bs.reload);
+});
+
+// Gulp task to minify HTML files
+gulp.task('pages', function () {
+    return gulp.src(['./src/**/*.html'])
+        // .pipe(htmlmin({
+        //     collapseWhitespace: true,
+        //     removeComments: true
+        // }))
+        .pipe(gulp.dest('./dist/'));
+});
+
+// Compile sass into CSS & auto-inject into browsers
+gulp.task('sass', function () {
+    return gulp.src(SASS_SCSS_PATH)
+        .pipe(sass())
+        .pipe(autoprefixer({
+            // overrideBrowserslist: ['last 2 versions'],                
+            overrideBrowserslist: AUTOPREFIXER_BROWSERS,
+            cascade: false
+        }))
+        .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(CSS_PATH))
+        .pipe(bs.stream());
+});
+
+gulp.task('transferImg', ['cleanImg'], function () {
+    gulp.src(SRC_IMAGES)
         .pipe(image())
-        .pipe(gulp.dest('./dist/img/'));
+        .pipe(gulp.dest(DIST_IMAGES));
 });
 
 //https://github.com/mahnunchik/gulp-responsive/blob/HEAD/examples/gulp-responsive-config.md
-gulp.task('images', ['clean'], function () {
+gulp.task('images', ['cleanImg'], function () {
     // Make configuration from existing HTML and CSS files
     var config = $.responsiveConfig([
         './src/sass/*.sass',
@@ -52,9 +110,9 @@ gulp.task('images', ['clean'], function () {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('clean', function () {
-    gulp.src('./dist/img', { read: false })
-        .pipe($.clean());
+gulp.task('cleanImg', function () {
+    gulp.src(DIST_IMAGES, { read: false })
+        .pipe(clean());
 });
 
 //https://www.npmjs.com/package/gulp-responsive
@@ -83,56 +141,7 @@ gulp.task('thumbs', function () {
         .pipe(gulp.dest('./dist/img/'))
 });
 
-const AUTOPREFIXER_BROWSERS = [
-    'ie >= 10',
-    'ie_mob >= 10',
-    'ff >= 30',
-    'chrome >= 34',
-    'safari >= 7',
-    'opera >= 23',
-    'ios >= 7',
-    'android >= 4.4',
-    'bb >= 10'
-];
 
-gulp.task('default', ['serve']);
-
-// Static Server + watching scss/html files
-gulp.task('serve', ['pages', 'sass', 'js'], function () {
-
-
-    bs.init({ // browser sync
-        server: "./dist"
-    });
-    gulp.watch("./src/sass/*.+(sass|scss)", ['sass']);
-    gulp.watch("./src/js/**/*.js", ['js']).on('change', bs.reload);
-    gulp.watch("./src/**/*.html", ['pages']).on('change', bs.reload);
-});
-
-// Gulp task to minify HTML files
-gulp.task('pages', function () {
-    return gulp.src(['./src/**/*.html'])
-        // .pipe(htmlmin({
-        //     collapseWhitespace: true,
-        //     removeComments: true
-        // }))
-        .pipe(gulp.dest('./dist/'));
-});
-
-// Compile sass into CSS & auto-inject into browsers
-gulp.task('sass', function () {
-    return gulp.src("./src/sass/*.+(sass|scss)")
-        .pipe(sass())
-        .pipe(autoprefixer({
-            // overrideBrowserslist: ['last 2 versions'],                
-            overrideBrowserslist: AUTOPREFIXER_BROWSERS,
-            cascade: false
-        }))
-        .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest("./dist/css/"))
-        .pipe(bs.stream());
-});
 
 gulp.task('js', function () {
     gulp.src([
