@@ -5,17 +5,7 @@ const SASS_SCSS_PATH = './src/sass/*.sass';
 const CSS_PATH = './dist/css/';
 const SRC_IMAGES = './src/images/**/*.+(ico|svg|png|jpg|webp)';
 const DIST_IMAGES = './dist/images/';
-const AUTOPREFIXER_BROWSERS = [
-    'ie >= 10',
-    'ie_mob >= 10',
-    'ff >= 30',
-    'chrome >= 34',
-    'safari >= 7',
-    'opera >= 23',
-    'ios >= 7',
-    'android >= 4.4',
-    'bb >= 10'
-];
+const AUTOPREFIXER_BROWSERS = ['last 9 version', 'safari 5', 'ie 8', 'ie 9', 'ie 10', 'opera 12.1', 'ios 6', 'android 4'];
 /* end config */
 
 let gulp = require('gulp'),
@@ -34,10 +24,11 @@ let gulp = require('gulp'),
     pngquant = require('imagemin-pngquant'),
     webp = require('imagemin-webp'),
     extReplace = require("gulp-ext-replace"),
-    // responsive = require('gulp-responsive'),//https://www.npmjs.com/package/gulp-responsive
+    responsive = require('gulp-responsive'),//https://www.npmjs.com/package/gulp-responsive
+    //clean
     clean = require('gulp-clean'),
-    $ = require('gulp-load-plugins')(),
-    image = require('gulp-image');
+    //uni
+    $ = require('gulp-load-plugins')();
 
 
 
@@ -68,9 +59,10 @@ gulp.task('sass', function () {
     return gulp.src(SASS_SCSS_PATH)
         .pipe(sass())
         .pipe(autoprefixer({
-            // overrideBrowserslist: ['last 2 versions'],                
             overrideBrowserslist: AUTOPREFIXER_BROWSERS,
-            cascade: false
+            cascade: false,
+            grid: 'autoplace',
+            remove: false
         }))
         .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
         .pipe(rename({ suffix: '.min' }))
@@ -78,10 +70,15 @@ gulp.task('sass', function () {
         .pipe(bs.stream());
 });
 
-gulp.task('transferImg', ['cleanImg'], function () {
+gulp.task('transferImg', ['cleanImg', 'imagemin'], function () {
     gulp.src(SRC_IMAGES)
-        .pipe(image())
         .pipe(gulp.dest(DIST_IMAGES));
+});
+
+//очистка старых изображений
+gulp.task('cleanImg', function () {
+    gulp.src(DIST_IMAGES, { read: false })
+        .pipe(clean());
 });
 
 //https://github.com/mahnunchik/gulp-responsive/blob/HEAD/examples/gulp-responsive-config.md
@@ -110,11 +107,6 @@ gulp.task('images', ['cleanImg'], function () {
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('cleanImg', function () {
-    gulp.src(DIST_IMAGES, { read: false })
-        .pipe(clean());
-});
-
 //https://www.npmjs.com/package/gulp-responsive
 gulp.task('thumbs', function () {
     gulp.src('./dist/img/**/*.jpg')
@@ -141,8 +133,6 @@ gulp.task('thumbs', function () {
         .pipe(gulp.dest('./dist/img/'))
 });
 
-
-
 gulp.task('js', function () {
     gulp.src([
         './src/js/**/*.js',
@@ -164,12 +154,12 @@ gulp.task('js', function () {
 });
 
 gulp.task('imagemin', () => {
-    gulp.src('./src/img/**/*')
+    gulp.src(SRC_IMAGES)
         .pipe(imagemin([
             pngquant({ quality: [0.7, 0.7] }),
             mozjpeg({ quality: 75 })
         ]))
-        .pipe(gulp.dest('./dist/img/'))
+        .pipe(gulp.dest(DIST_IMAGES))
 });
 
 // its working
