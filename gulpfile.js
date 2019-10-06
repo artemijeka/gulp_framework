@@ -1,10 +1,18 @@
 'use strict';
 
 /* config */
-const SASS_SCSS_PATH = './src/sass/*.sass';
-const CSS_PATH = './dist/css/';
-const SRC_IMAGES = './src/images/**/*.+(ico|svg|png|jpg|webp)';
-const DIST_IMAGES = './dist/images/';
+const SRC_PAGES = ['./src/**/*.html'];
+const SRC_IMAGES = './src/img/**/*.+(ico|svg|png|jpg|webp)';
+const SRC_SASS_SCSS = './src/scss/*.scss';
+const SRC_JS = [
+    './src/js/**/*.js',
+    './src/libs/**/*.js',
+    '!./src/js/_*.js' //!-позволяет пропустить файлы
+];
+const DIST = './dist/';
+const DIST_CSS = './dist/css/';
+const DIST_JS= './dist/js/';
+const DIST_IMAGES = './dist/img/';
 const AUTOPREFIXER_BROWSERS = ['last 9 version', 'safari 5', 'ie 8', 'ie 9', 'ie 10', 'opera 12.1', 'ios 6', 'android 4'];
 /* end config */
 
@@ -37,26 +45,26 @@ gulp.task('default', ['serve']);
 // Static Server + watching scss/html files
 gulp.task('serve', ['pages', 'sass', 'js', 'transferImg'], function () {
     bs.init({ // browser sync
-        server: "./dist"
+        server: DIST
     });
-    gulp.watch(SASS_SCSS_PATH, ['sass']);
+    gulp.watch(SRC_SASS_SCSS, ['sass']);
     gulp.watch("./src/js/**/*.js", ['js']).on('change', bs.reload);
     gulp.watch("./src/**/*.html", ['pages']).on('change', bs.reload);
 });
 
 // Gulp task to minify HTML files
 gulp.task('pages', function () {
-    return gulp.src(['./src/**/*.html'])
-        // .pipe(htmlmin({
-        //     collapseWhitespace: true,
-        //     removeComments: true
-        // }))
-        .pipe(gulp.dest('./dist/'));
+    return gulp.src(SRC_PAGES)
+        .pipe(htmlmin({
+            collapseWhitespace: true,
+            removeComments: true
+        }))
+        .pipe(gulp.dest(DIST));
 });
 
 // Compile sass into CSS & auto-inject into browsers
 gulp.task('sass', function () {
-    return gulp.src(SASS_SCSS_PATH)
+    return gulp.src(SRC_SASS_SCSS)
         .pipe(sass())
         .pipe(autoprefixer({
             overrideBrowserslist: AUTOPREFIXER_BROWSERS,
@@ -66,7 +74,7 @@ gulp.task('sass', function () {
         }))
         .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(CSS_PATH))
+        .pipe(gulp.dest(DIST_CSS))
         .pipe(bs.stream());
 });
 
@@ -134,11 +142,7 @@ gulp.task('thumbs', function () {
 });
 
 gulp.task('js', function () {
-    gulp.src([
-        './src/js/**/*.js',
-        './src/libs/**/*.js',
-        '!src/js/_*.js', //!-позволяет пропустить файлы
-    ])
+    gulp.src(SRC_JS)
         .pipe(uglify({
             mangle: true,
             output: {
@@ -150,14 +154,14 @@ gulp.task('js', function () {
             console.log(e);
         })
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest('./dist/js/'));
+        .pipe(gulp.dest(DIST_JS));
 });
 
 gulp.task('imagemin', () => {
     gulp.src(SRC_IMAGES)
         .pipe(imagemin([
             pngquant({ quality: [0.7, 0.7] }),
-            mozjpeg({ quality: 75 })
+            mozjpeg({ quality: 81 })
         ]))
         .pipe(gulp.dest(DIST_IMAGES))
 });
