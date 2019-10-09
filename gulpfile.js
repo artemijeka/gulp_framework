@@ -1,17 +1,28 @@
 'use strict';
 
 /* config */
+// ! - перед путем позволяет пропустить файлы в дирректории
 const SRC_PAGES = ['./src/**/*.html'];
 const SRC_IMAGES = './src/img/**/*.+(ico|svg|png|jpg|webp)';
 const SRC_SASS_SCSS = './src/scss/*.scss';
+const SRC_JS_HEADER = [
+    './src/js/header/**/_*.js',
+    './src/js/header/**/*.js'
+];
+const SRC_JS_FOOTER = [
+    './src/js/footer/**/_*.js',
+    './src/js/footer/**/*.js'
+];
 const SRC_JS = [
-    './src/js/**/*.js',
-    './src/libs/**/*.js',
-    '!./src/js/_*.js' //!-позволяет пропустить файлы
+    './src/js/_*.js',
+    './src/js/*.js'
+];
+const SRC_JS_LIBS = [
+    './src/libs/**/*.js'
 ];
 const DIST = './dist/';
 const DIST_CSS = './dist/css/';
-const DIST_JS= './dist/js/';
+const DIST_JS = './dist/js/';
 const DIST_IMAGES = './dist/img/';
 const AUTOPREFIXER_BROWSERS = ['last 9 version', 'safari 5', 'ie 8', 'ie 9', 'ie 10', 'opera 12.1', 'ios 6', 'android 4'];
 /* end config */
@@ -25,6 +36,7 @@ let gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     cleanCss = require('gulp-clean-css'),
     uglify = require('gulp-uglify-es').default,
+    concat = require('gulp-concat'),
     rename = require('gulp-rename'),
     //images
     imagemin = require('gulp-imagemin'),
@@ -76,6 +88,47 @@ gulp.task('sass', function () {
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(DIST_CSS))
         .pipe(bs.stream());
+});
+
+gulp.task('js', function () {
+    //сначала очистка
+    gulp.src(DIST_JS, { read: false })
+        .pipe(clean());
+
+    gulp.src(SRC_JS)
+        .pipe(concat('scripts.js'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(uglify())
+        .pipe(gulp.dest(DIST_JS));
+
+    gulp.src(SRC_JS_LIBS)
+        .pipe(concat('libs.js'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(DIST_JS));
+
+    gulp.src(SRC_JS_HEADER)
+        .pipe(concat('scripts-header.js'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(uglify())
+        .pipe(gulp.dest(DIST_JS));
+
+    gulp.src(SRC_JS_FOOTER)
+        .pipe(concat('scripts-footer.js'))
+        // .pipe(gulp.dest(DIST_JS))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(uglify(
+            //     {
+            //     mangle: true,
+            //     output: {
+            //         beautify: true
+            //     },
+            //     mangle: { toplevel: true }
+            // }
+        ))
+        // .on('error', function (e) {
+        //     console.log(e);
+        // })
+        .pipe(gulp.dest(DIST_JS));
 });
 
 gulp.task('transferImg', ['cleanImg', 'imagemin'], function () {
@@ -141,21 +194,7 @@ gulp.task('thumbs', function () {
         .pipe(gulp.dest('./dist/img/'))
 });
 
-gulp.task('js', function () {
-    gulp.src(SRC_JS)
-        .pipe(uglify({
-            mangle: true,
-            output: {
-                beautify: true
-            }
-            // mangle: { toplevel: true }
-        }))
-        .on('error', function (e) {
-            console.log(e);
-        })
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(DIST_JS));
-});
+
 
 gulp.task('imagemin', () => {
     gulp.src(SRC_IMAGES)
