@@ -4,7 +4,14 @@
 // ! - перед путем позволяет пропустить файлы в дирректории
 const SRC_PAGES = ['./src/**/*.html'];
 const SRC_IMAGES = './src/img/**/*.+(ico|svg|png|jpg|webp)';
-const SRC_SASS_SCSS = './src/scss/*.scss';
+const SRC_SASS_HEADER = [
+    './src/sass/header/*.sass',
+    '!./src/sass/header/_*.sass'
+];
+const SRC_SASS_FOOTER = [
+    './src/sass/footer/*.sass',
+    '!./src/sass/footer/_*.sass'
+];
 const SRC_JS_HEADER = [
     './src/js/header/**/_*.js',
     './src/js/header/**/*.js'
@@ -13,13 +20,10 @@ const SRC_JS_FOOTER = [
     './src/js/footer/**/_*.js',
     './src/js/footer/**/*.js'
 ];
-const SRC_JS = [
-    './src/js/_*.js',
-    './src/js/*.js'
-];
-const SRC_JS_LIBS = [
-    './src/libs/**/*.js'
-];
+// const SRC_JS_LIBS = [
+//     '!./src/libs/**/_*.js',
+//     '!./src/libs/**/*.js'
+// ];
 const DIST = './dist/';
 const DIST_CSS = './dist/css/';
 const DIST_JS = './dist/js/';
@@ -59,13 +63,16 @@ gulp.task('serve', ['pages', 'sass', 'js', 'transferImg'], function () {
     bs.init({ // browser sync
         server: DIST
     });
-    gulp.watch(SRC_SASS_SCSS, ['sass']);
-    gulp.watch("./src/js/**/*.js", ['js']).on('change', bs.reload);
+    gulp.watch(SRC_SASS_HEADER, ['sass']).on('change', bs.reload);
+    gulp.watch(SRC_SASS_FOOTER, ['sass']).on('change', bs.reload);
+    // gulp.watch(SRC_JS_LIBS, ['js']).on('change', bs.reload);
+    gulp.watch(SRC_JS_HEADER, ['js']).on('change', bs.reload);
+    gulp.watch(SRC_JS_FOOTER, ['js']).on('change', bs.reload);
     gulp.watch("./src/**/*.html", ['pages']).on('change', bs.reload);
 });
 
 // Gulp task to minify HTML files
-gulp.task('pages', function () {
+gulp.task('pages', function() {
     return gulp.src(SRC_PAGES)
         .pipe(htmlmin({
             collapseWhitespace: true,
@@ -75,8 +82,12 @@ gulp.task('pages', function () {
 });
 
 // Compile sass into CSS & auto-inject into browsers
-gulp.task('sass', function () {
-    return gulp.src(SRC_SASS_SCSS)
+gulp.task('sass', function() {
+    //сначала очистка
+    gulp.src(DIST_CSS, { read: true })
+        .pipe(clean());
+
+    gulp.src(SRC_SASS_HEADER)
         .pipe(sass())
         .pipe(autoprefixer({
             overrideBrowserslist: AUTOPREFIXER_BROWSERS,
@@ -85,7 +96,20 @@ gulp.task('sass', function () {
             remove: false
         }))
         .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
-        .pipe(rename({ suffix: '.min' }))
+        .pipe(rename({ suffix: '.header.min' }))
+        .pipe(gulp.dest(DIST_CSS))
+        .pipe(bs.stream());
+
+    gulp.src(SRC_SASS_FOOTER)
+        .pipe(sass())
+        .pipe(autoprefixer({
+            overrideBrowserslist: AUTOPREFIXER_BROWSERS,
+            cascade: false,
+            grid: 'autoplace',
+            remove: false
+        }))
+        .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
+        .pipe(rename({ suffix: '.footer.min' }))
         .pipe(gulp.dest(DIST_CSS))
         .pipe(bs.stream());
 });
@@ -95,16 +119,10 @@ gulp.task('js', function () {
     gulp.src(DIST_JS, { read: false })
         .pipe(clean());
 
-    gulp.src(SRC_JS)
-        .pipe(concat('scripts.js'))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify())
-        .pipe(gulp.dest(DIST_JS));
-
-    gulp.src(SRC_JS_LIBS)
-        .pipe(concat('libs.js'))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(DIST_JS));
+    // gulp.src(SRC_JS_LIBS)
+    //     .pipe(concat('libs.js'))
+    //     .pipe(rename({ suffix: '.min' }))
+    //     .pipe(gulp.dest(DIST_JS));
 
     gulp.src(SRC_JS_HEADER)
         .pipe(concat('scripts-header.js'))
