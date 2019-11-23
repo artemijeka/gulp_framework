@@ -167,7 +167,7 @@ gulp.task('images', ['cleanImg'], function () {
         './src/sass/*.sass',
         './src/*.html'
     ]);
-    console.log(config);
+    // console.log(config);
     gulp.src(['./src/**/*.jpg'])
         // Use configuration
         .pipe($.responsive(config, {
@@ -175,7 +175,7 @@ gulp.task('images', ['cleanImg'], function () {
             errorOnUnusedImage: false,
             passThroughUnused: false,
             progressive: true,
-            quality: 60,
+            quality: 75,
             withMetadata: false,
             compressionLevel: 9,
             format: 'jpg',
@@ -217,8 +217,8 @@ gulp.task('thumbs', function () {
 gulp.task('imagemin', () => {
     gulp.src(SRC_IMAGES)
         .pipe(imagemin([
-            pngquant({ quality: [0.91, 0.93] }),
-            mozjpeg({ quality: 81 })
+            pngquant({ quality: [0.90, 0.91] }),
+            mozjpeg({ quality: 79 })
         ]))
         .pipe(gulp.dest(DIST_IMAGES))
 });
