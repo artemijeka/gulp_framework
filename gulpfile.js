@@ -20,10 +20,10 @@ const SRC_JS_FOOTER = [
     './src/js/footer/**/_*.js',
     './src/js/footer/**/*.js'
 ];
-// const SRC_JS_LIBS = [
-//     '!./src/libs/**/_*.js',
-//     '!./src/libs/**/*.js'
-// ];
+const SRC_JS_LIBS = [
+    './src/libs/**/_*.js',
+    './src/libs/**/*.js'
+];
 const DIST = './dist/';
 const DIST_CSS = './dist/css/';
 const DIST_JS = './dist/js/';
@@ -31,7 +31,7 @@ const DIST_IMAGES = './dist/img/';
 const AUTOPREFIXER_BROWSERS = ['last 9 version', 'safari 5', 'ie 8', 'ie 9', 'ie 10', 'opera 12.1', 'ios 6', 'android 4'];
 /* end config */
 
-let gulp = require('gulp'),
+const gulp = require('gulp'),
     bs = require('browser-sync'),
     sass = require('gulp-sass'),
     htmlmin = require('gulp-htmlmin'),
@@ -40,6 +40,7 @@ let gulp = require('gulp'),
     autoprefixer = require('gulp-autoprefixer'),
     cleanCss = require('gulp-clean-css'),
     uglify = require('gulp-uglify-es').default,
+    babel = require('gulp-babel'),
     concat = require('gulp-concat'),
     rename = require('gulp-rename'),
     //images
@@ -72,7 +73,7 @@ gulp.task('serve', ['pages', 'sass', 'js', 'transferImg'], function () {
 });
 
 // Gulp task to minify HTML files
-gulp.task('pages', function() {
+gulp.task('pages', function () {
     return gulp.src(SRC_PAGES)
         .pipe(htmlmin({
             collapseWhitespace: true,
@@ -82,7 +83,7 @@ gulp.task('pages', function() {
 });
 
 // Compile sass into CSS & auto-inject into browsers
-gulp.task('sass', function() {
+gulp.task('sass', function () {
     //сначала очистка
     gulp.src(DIST_CSS, { read: true })
         .pipe(clean());
@@ -119,30 +120,32 @@ gulp.task('js', function () {
     gulp.src(DIST_JS, { read: false })
         .pipe(clean());
 
-    // gulp.src(SRC_JS_LIBS)
-    //     .pipe(concat('libs.js'))
-    //     .pipe(rename({ suffix: '.min' }))
-    //     .pipe(gulp.dest(DIST_JS));
+    gulp.src(SRC_JS_LIBS)
+        .pipe(concat('libs.js'))
+        .pipe(babel({
+            presets: ['@babel/env']
+        }))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(uglify())
+        .pipe(gulp.dest(DIST_JS));
 
     gulp.src(SRC_JS_HEADER)
-        .pipe(concat('scripts-header.js'))
+        .pipe(concat('header.js'))
+        .pipe(babel({
+            presets: ['@babel/env']
+        }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(uglify())
         .pipe(gulp.dest(DIST_JS));
 
     gulp.src(SRC_JS_FOOTER)
-        .pipe(concat('scripts-footer.js'))
+        .pipe(concat('footer.js'))
+        .pipe(babel({
+            presets: ['@babel/env']
+        }))
         // .pipe(gulp.dest(DIST_JS))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify(
-            //     {
-            //     mangle: true,
-            //     output: {
-            //         beautify: true
-            //     },
-            //     mangle: { toplevel: true }
-            // }
-        ))
+        .pipe(uglify())
         // .on('error', function (e) {
         //     console.log(e);
         // })
