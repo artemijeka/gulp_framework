@@ -221,7 +221,7 @@ gulp.task('imagemin', () => {
     gulp.src(SRC_IMAGES)
         .pipe(imagemin([
             pngquant({ quality: [0.90, 0.91] }),
-            mozjpeg({ quality: 79 })
+            mozjpeg({ quality: 74 })
         ]))
         .pipe(gulp.dest(DIST_IMAGES))
 });
