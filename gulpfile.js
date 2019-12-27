@@ -164,7 +164,7 @@ gulp.task('cleanImg', function () {
 });
 
 //https://github.com/mahnunchik/gulp-responsive/blob/HEAD/examples/gulp-responsive-config.md
-gulp.task('images', ['cleanImg'], function () {
+gulp.task('images', function () {
     // Make configuration from existing HTML and CSS files
     var config = $.responsiveConfig([
         './src/sass/*.sass',
