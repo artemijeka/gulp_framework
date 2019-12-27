@@ -163,6 +163,15 @@ gulp.task('cleanImg', function () {
         .pipe(clean());
 });
 
+gulp.task('imagemin', () => {
+    gulp.src(SRC_IMAGES)
+        .pipe(imagemin([
+            pngquant({ quality: [0.89, 0.91] }),
+            mozjpeg({ quality: 81 })
+        ]))
+        .pipe(gulp.dest(DIST_IMAGES))
+});
+
 //https://github.com/mahnunchik/gulp-responsive/blob/HEAD/examples/gulp-responsive-config.md
 gulp.task('images', function () {
     // Make configuration from existing HTML and CSS files
@@ -215,16 +224,6 @@ gulp.task('thumbs', function () {
         .pipe(gulp.dest('./dist/img/'))
 });
 
-
-
-gulp.task('imagemin', () => {
-    gulp.src(SRC_IMAGES)
-        .pipe(imagemin([
-            pngquant({ quality: [0.90, 0.91] }),
-            mozjpeg({ quality: 74 })
-        ]))
-        .pipe(gulp.dest(DIST_IMAGES))
-});
 
 // its working
 // export to webp
