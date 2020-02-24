@@ -1,76 +1,61 @@
 'use strict';
 
 /* config */
-// ! - перед путем позволяет пропустить файлы в дирректории
 const SRC_PAGES = ['./src/**/*.html'];
-const SRC_IMAGES = './src/img/**/*.+(ico|svg|png|jpg|webp)';
-const SRC_SASS_HEADER = [
-    './src/sass/header/*.sass',
-    '!./src/sass/header/_*.sass'
-];
-const SRC_SASS_FOOTER = [
-    './src/sass/footer/*.sass',
-    '!./src/sass/footer/_*.sass'
-];
-const SRC_JS_HEADER = [
-    './src/js/header/**/_*.js',
-    './src/js/header/**/*.js'
-];
-const SRC_JS_FOOTER = [
-    './src/js/footer/**/_*.js',
-    './src/js/footer/**/*.js'
-];
-const SRC_JS_LIBS = [
-    './src/libs/**/_*.js',
-    './src/libs/**/*.js'
-];
+
 const DIST = './dist/';
-const DIST_CSS = './dist/css/';
-const DIST_JS = './dist/js/';
+
+const SRC_IMAGES = './src/img/**/*.+(ico|svg|png|jpg|gif|webp)';
 const DIST_IMAGES = './dist/img/';
+
+const SRC_SCSS_HEADER = [
+    './src/scss/header/*.scss'
+];
+const SRC_SCSS_FOOTER = [
+    './src/scss/footer/*.scss'
+];
+
+const DIST_CSS_HEADER = './dist/css/header/';
+const DIST_CSS_FOOTER = './dist/css/footer/';
+
+const SRC_JS_VENDOR_HEADER = './src/js/vendor/header/';
+const SRC_JS_VENDOR_FOOTER = './src/js/vendor/footer/';
+const DIST_JS_VENDOR_HEADER = './dist/js/vendor/header/';
+const DIST_JS_VENDOR_FOOTER = './dist/js/vendor/footer/';
+const SRC_JS_HEADER = './src/js/header/';
+const SRC_JS_FOOTER = './src/js/footer/';
+const DIST_JS_HEADER = './dist/js/header/';
+const DIST_JS_FOOTER = './dist/js/footer/';
+
 const AUTOPREFIXER_BROWSERS = ['last 9 version', 'safari 5', 'ie 8', 'ie 9', 'ie 10', 'opera 12.1', 'ios 6', 'android 4'];
 /* end config */
 
 const gulp = require('gulp'),
     bs = require('browser-sync'),
-    sass = require('gulp-sass'),
     htmlmin = require('gulp-htmlmin'),
-    gutil = require('gulp-util'),
-    ftp = require('vinyl-ftp'),
-    autoprefixer = require('gulp-autoprefixer'),
-    cleanCss = require('gulp-clean-css'),
-    uglify = require('gulp-uglify-es').default,
-    babel = require('gulp-babel'),
-    concat = require('gulp-concat'),
-    rename = require('gulp-rename'),
-    //images
-    imagemin = require('gulp-imagemin'),
-    mozjpeg = require('imagemin-mozjpeg'),
-    pngquant = require('imagemin-pngquant'),
-    webp = require('imagemin-webp'),
-    extReplace = require("gulp-ext-replace"),
-    responsive = require('gulp-responsive'),//https://www.npmjs.com/package/gulp-responsive
     //clean
     clean = require('gulp-clean'),
-    //uni
-    $ = require('gulp-load-plugins')();
+    scss = require('gulp-sass'),
+    autoprefixer = require('gulp-autoprefixer'),
+    cleanCss = require('gulp-clean-css'),
+    rename = require('gulp-rename'),
+    concat = require('gulp-concat'),
+    babel = require('gulp-babel'),
+    imagemin = require('gulp-imagemin'),
+    pngquant = require('imagemin-pngquant'),
+    mozjpeg = require('imagemin-mozjpeg'),
+    webp = require('imagemin-webp'),
+    extReplace = require("gulp-ext-replace"),
+    uglify = require('gulp-uglify-es').default;
+
+    // gutil = require('gulp-util'),
+    // ftp = require('vinyl-ftp'),
+    // //images
+    // responsive = require('gulp-responsive'),//https://www.npmjs.com/package/gulp-responsive
+    // //uni
+    // $ = require('gulp-load-plugins')();
 
 
-
-gulp.task('default', ['serve']);
-
-// Static Server + watching scss/html files
-gulp.task('serve', ['pages', 'sass', 'js', 'transferImg'], function () {
-    bs.init({ // browser sync
-        server: DIST
-    });
-    gulp.watch(SRC_SASS_HEADER, ['sass']).on('change', bs.reload);
-    gulp.watch(SRC_SASS_FOOTER, ['sass']).on('change', bs.reload);
-    // gulp.watch(SRC_JS_LIBS, ['js']).on('change', bs.reload);
-    gulp.watch(SRC_JS_HEADER, ['js']).on('change', bs.reload);
-    gulp.watch(SRC_JS_FOOTER, ['js']).on('change', bs.reload);
-    gulp.watch("./src/**/*.html", ['pages']).on('change', bs.reload);
-});
 
 // Gulp task to minify HTML files
 gulp.task('pages', function () {
@@ -82,14 +67,13 @@ gulp.task('pages', function () {
         .pipe(gulp.dest(DIST));
 });
 
-// Compile sass into CSS & auto-inject into browsers
-gulp.task('sass', function () {
+gulp.task('scss_header', function () {
     //сначала очистка
-    gulp.src(DIST_CSS, { read: true })
+    gulp.src(DIST_CSS_HEADER, { read: true, allowEmpty: true })
         .pipe(clean());
 
-    gulp.src(SRC_SASS_HEADER)
-        .pipe(sass())
+    return gulp.src(SRC_SCSS_HEADER)
+        .pipe(scss())
         .pipe(autoprefixer({
             overrideBrowserslist: AUTOPREFIXER_BROWSERS,
             cascade: false,
@@ -98,79 +82,139 @@ gulp.task('sass', function () {
         }))
         .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
         .pipe(rename({ suffix: '.header.min' }))
-        .pipe(gulp.dest(DIST_CSS))
-        .pipe(bs.stream());
-
-    gulp.src(SRC_SASS_FOOTER)
-        .pipe(sass())
-        .pipe(autoprefixer({
-            overrideBrowserslist: AUTOPREFIXER_BROWSERS,
-            cascade: false,
-            grid: 'autoplace',
-            remove: false
-        }))
-        .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
-        .pipe(rename({ suffix: '.footer.min' }))
-        .pipe(gulp.dest(DIST_CSS))
+        .pipe(gulp.dest(DIST_CSS_HEADER))
         .pipe(bs.stream());
 });
 
-gulp.task('js', function () {
+gulp.task('scss_footer', function () {
     //сначала очистка
-    gulp.src(DIST_JS, { read: false })
+    gulp.src(DIST_CSS_FOOTER, { read: true, allowEmpty: true })
         .pipe(clean());
 
-    gulp.src(SRC_JS_LIBS)
-        .pipe(concat('libs.js'))
+    return gulp.src(SRC_SCSS_FOOTER)
+    .pipe(scss())
+    .pipe(autoprefixer({
+        overrideBrowserslist: AUTOPREFIXER_BROWSERS,
+        cascade: false,
+        grid: 'autoplace',
+        remove: false
+    }))
+    .pipe(cleanCss({ compatibility: 'ie8' })) // Минификация css 
+    .pipe(rename({ suffix: '.footer.min' }))
+    .pipe(gulp.dest(DIST_CSS_FOOTER))
+    .pipe(bs.stream());
+});
+
+gulp.task('js_vendor_header', function () {
+    //сначала очистка
+    gulp.src(DIST_JS_VENDOR_HEADER, { read: false, allowEmpty: true })
+        .pipe(clean());
+
+    return gulp.src(SRC_JS_VENDOR_HEADER, {allowEmpty: true})
+        .pipe(concat('libs.header.js'))
         .pipe(babel({
             presets: ['@babel/env']
         }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(uglify())
-        .pipe(gulp.dest(DIST_JS));
+        .pipe(gulp.dest(DIST_JS_VENDOR_HEADER));
+});
 
-    gulp.src(SRC_JS_HEADER)
+gulp.task('js_vendor_footer', function () {
+    //сначала очистка
+    gulp.src(DIST_JS_VENDOR_FOOTER, { read: false, allowEmpty: true })
+        .pipe(clean());
+
+    return gulp.src(SRC_JS_VENDOR_FOOTER, {allowEmpty: true})
+        .pipe(concat('libs.footer.js'))
+        .pipe(babel({
+            presets: ['@babel/env']
+        }))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(uglify())
+        .pipe(gulp.dest(DIST_JS_VENDOR_FOOTER));
+});
+
+gulp.task('js_header', function () {
+    return gulp.src(SRC_JS_HEADER)
         .pipe(concat('header.js'))
         .pipe(babel({
             presets: ['@babel/env']
         }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(uglify())
-        .pipe(gulp.dest(DIST_JS));
-
-    gulp.src(SRC_JS_FOOTER)
-        .pipe(concat('footer.js'))
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
-        // .pipe(gulp.dest(DIST_JS))
-        .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify())
-        // .on('error', function (e) {
-        //     console.log(e);
-        // })
-        .pipe(gulp.dest(DIST_JS));
+        .pipe(gulp.dest(DIST_JS_HEADER));
 });
 
-gulp.task('transferImg', ['cleanImg', 'imagemin'], function () {
-    gulp.src(SRC_IMAGES)
-        .pipe(gulp.dest(DIST_IMAGES));
+gulp.task('js_footer', function () {
+    return gulp.src(SRC_JS_FOOTER)
+    .pipe(concat('footer.js'))
+    .pipe(babel({
+        presets: ['@babel/env']
+    }))
+    // .pipe(gulp.dest(DIST_JS))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(uglify())
+    // .on('error', function (e) {
+    //     console.log(e);
+    // })
+    .pipe(gulp.dest(DIST_JS_FOOTER));
 });
 
 //очистка старых изображений
 gulp.task('cleanImg', function () {
-    gulp.src(DIST_IMAGES, { read: false })
+    return gulp.src(DIST_IMAGES, { read: false, allowEmpty: true })
         .pipe(clean());
 });
 
-gulp.task('imagemin', () => {
-    gulp.src(SRC_IMAGES)
+gulp.task('imagemin', function () {
+    return gulp.src(SRC_IMAGES)
         .pipe(imagemin([
             pngquant({ quality: [0.89, 0.91] }),
             mozjpeg({ quality: 81 })
         ]))
         .pipe(gulp.dest(DIST_IMAGES))
 });
+
+gulp.task('transferImg', function () {
+    return gulp.src(SRC_IMAGES)
+        .pipe(gulp.dest(DIST_IMAGES));
+});
+
+// export to webp
+gulp.task("ewebp", function () {
+    return gulp.src(SRC_IMAGES)
+        .pipe(
+            imagemin([
+                webp({
+                    quality: 75
+                })
+            ]))
+        .pipe(extReplace(".webp"))
+        .pipe(gulp.dest(DIST_IMAGES));
+});
+
+
+// Static Server + watching scss/html files
+gulp.task('run_server', function (done) {
+    bs.init({ // browser sync
+        server: DIST
+    });
+    gulp.watch(SRC_SCSS_HEADER, gulp.series('scss_header'));
+    gulp.watch(SRC_SCSS_FOOTER, gulp.series('scss_footer'));
+    gulp.watch(SRC_JS_VENDOR_HEADER, gulp.series('js_vendor_header'));
+    gulp.watch(SRC_JS_VENDOR_FOOTER, gulp.series('js_vendor_footer'));
+    gulp.watch(SRC_JS_HEADER, gulp.series('js_header'));
+    gulp.watch(SRC_JS_FOOTER, gulp.series('js_footer'));
+    gulp.watch(SRC_PAGES, gulp.series('pages'));
+    done();
+});
+
+
+
+gulp.task('default', gulp.series('pages', 'scss_header', 'scss_footer', 'js_vendor_header', 'js_vendor_footer', 'js_header', 'js_footer', 'cleanImg', 'imagemin', 'transferImg', 'ewebp', 'run_server'));
+
+
 
 //https://github.com/mahnunchik/gulp-responsive/blob/HEAD/examples/gulp-responsive-config.md
 gulp.task('images', function () {
@@ -197,6 +241,8 @@ gulp.task('images', function () {
         }))
         .pipe(gulp.dest('./dist'));
 });
+
+
 
 //https://www.npmjs.com/package/gulp-responsive
 gulp.task('thumbs', function () {
@@ -225,21 +271,6 @@ gulp.task('thumbs', function () {
 });
 
 
-// its working
-// export to webp
-gulp.task("ewebp", function () {
-    let src = ["./src/img/**/*.+(jpg|png|jpeg|webp)"]; // Where your PNGs are coming from.
-    let dest = "./src/img/"; // Where your WebPs are going.
-    return gulp.src(src)
-        .pipe(
-            imagemin([
-                webp({
-                    quality: 75
-                })
-            ]))
-        .pipe(extReplace(".webp"))
-        .pipe(gulp.dest(dest));
-});
 
 gulp.task('deploy', function () {
 
