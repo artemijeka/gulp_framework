@@ -9,9 +9,11 @@ const SRC = {
         './src/**/fonts/*.*', 
         './src/**/.htaccess',
         '!./src/**/*.html', 
+        '!./src/**/*.pug', 
         // './src/**/*.php', 
         // './src/**/*.settings'
     ],
+    PUG: ['./src/**/*.pug'],
     HTML: [
         './src/**/*.html'
     ],
@@ -72,6 +74,7 @@ const gulp = require('gulp'),
     // ftp = require('vinyl-ftp'),
     // gutil = require('gulp-util'),
     bs = require('browser-sync'),
+    pug = require('gulp-pug'),
     htmlmin = require('gulp-htmlmin'),
     //clean
     clean = require('gulp-clean'),
@@ -105,6 +108,15 @@ gulp.task('move_files', function () {
     return gulp.src(SRC.FILES)
         .pipe(gulp.dest(DEV.ROOT));
 });
+
+
+gulp.task('pug', function () {
+    return gulp.src(SRC.PUG)
+        .pipe(pug({pretty: '\t'}))
+        .pipe(gulp.dest(DEV.ROOT))
+        .pipe(bs.stream());
+});
+
 
 // Gulp task to minify HTML files
 gulp.task('minhtml', function () {
@@ -291,6 +303,7 @@ gulp.task('run_server', function (done) {
     bs.init({ // browser sync
         server: DEV.ROOT
     });
+    gulp.watch(SRC.PUG, gulp.series('pug'));
     gulp.watch(SRC.SCSS.HEADER, gulp.series('scss_header'));
     gulp.watch(SRC.SCSS.FOOTER, gulp.series('scss_footer'));
     gulp.watch(SRC.SCSS.VENDOR.HEADER, gulp.series('scss_vendor_header'));
@@ -303,7 +316,7 @@ gulp.task('run_server', function (done) {
     done();
 });
 
-gulp.task('default', gulp.series('clean_dev', 'minhtml', 'move_files', 'scss_vendor_header', 'scss_vendor_footer', 'scss_header', 'scss_footer', 'js_vendor_header', 'js_vendor_footer', 'js_header', 'js_footer', 'imagemin', 'ewebp', 'run_server'));
+gulp.task('default', gulp.series('clean_dev', 'pug', 'minhtml', 'move_files', 'scss_vendor_header', 'scss_vendor_footer', 'scss_header', 'scss_footer', 'js_vendor_header', 'js_vendor_footer', 'js_header', 'js_footer', 'imagemin', 'ewebp', 'run_server'));
 
 
 
