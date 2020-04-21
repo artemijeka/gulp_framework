@@ -6,7 +6,7 @@
 const SRC = {
     FILES: [
         './src/*.*', 
-        './src/**/fonts/*.*', 
+        './src/**/*.+(eot|svg|ttf|woff|woff2)', 
         './src/**/.htaccess',
         '!./src/**/*.html', 
         '!./src/**/*.pug', 
@@ -17,22 +17,22 @@ const SRC = {
     HTML: [
         './src/**/*.html'
     ],
-    FONTS: ['./src/fonts/*'],
+    // FONTS: ['./src/fonts/*'],
     IMAGES: './src/img/**/*.+(ico|svg|png|jpg|gif|webp)',
     SCSS: {
-        HEADER: ['./src/scss/header/*.scss'],
+        HEADER: ['./src/scss/header/**/*.scss'],
         VENDOR: {
-            HEADER: ['./src/scss/vendor/header/*.scss'],
-            FOOTER: ['./src/scss/vendor/footer/*.scss'],
+            HEADER: ['./src/scss/vendor/header/**/*.scss'],
+            FOOTER: ['./src/scss/vendor/footer/**/*.scss'],
         },
-        FOOTER: ['./src/scss/footer/*.scss'],
+        FOOTER: ['./src/scss/footer/**/*.scss'],
     },
     JS: {
         HEADER: './src/js/header/*.js',
         FOOTER: './src/js/footer/*.js',
         VENDOR: {
-            HEADER: './src/js/vendor/header/*.js',
-            FOOTER: './src/js/vendor/footer/*.js',
+            HEADER: './src/js/header/vendor/*.js',
+            FOOTER: './src/js/footer/vendor/*.js',
         },
     },
 };
@@ -42,7 +42,7 @@ const DEV = {
     ROOT: './dev/',
     FILES: [
         './dev/*.*',
-        './dev/**/fonts/*.*',
+        './dev/fonts/**/*',
         './dev/**/img/**/*.*',
         './dev/**/.htaccess',
         './dev/**/*.html',
@@ -63,7 +63,7 @@ const DEV = {
         FOOTER: ['./dev/js/vendor/footer.min.js', './dev/js/footer.min.js'],
     },
     IMAGES: './dev/img/',
-    FONTS: ['./dev/fonts/'],
+    // FONTS: ['./dev/fonts/'],
 };
 
 
@@ -249,7 +249,7 @@ gulp.task('js_header', function () {
             presets: ['@babel/env']
         }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest(DEV.JS.ROOT));
 });
 
@@ -264,7 +264,7 @@ gulp.task('js_footer', function () {
             presets: ['@babel/env']
         }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest(DEV.JS.ROOT));
 });
 
