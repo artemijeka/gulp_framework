@@ -1,0 +1,10 @@
+button::-moz-focus-inner,
+a {
+  border: 0 !important;
+  outline: none!important;
+}
+
+input::-webkit-input-placeholder {opacity: 1;}
+input::-moz-placeholder          {opacity: 1;}/* Firefox 19+ */
+input:-moz-placeholder           {opacity: 1;}/* Firefox 18- */
+input:-ms-input-placeholder      {opacity: 1;}
