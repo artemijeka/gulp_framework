@@ -1,5 +1,18 @@
 //this rules additional for normalize.css ( https://github.com/necolas/normalize.css )
 
+
+//zeroing
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  padding: 0;
+}
+
+
 //buttons not border, background, outline
 button {
   background-color: transparent;
