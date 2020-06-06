@@ -303,7 +303,8 @@ gulp.task('run_server', function (done) {
     bs.init({ // browser sync
         server: DEV.ROOT
     });
-    gulp.watch(SRC.PUG, gulp.series('pug'));
+    gulp.watch(SRC.HTML, gulp.series('minhtml'));
+    // gulp.watch(SRC.PUG, gulp.series('pug'));
     gulp.watch(SRC.SCSS.HEADER, gulp.series('scss_header'));
     gulp.watch(SRC.SCSS.FOOTER, gulp.series('scss_footer'));
     gulp.watch(SRC.SCSS.VENDOR.HEADER, gulp.series('scss_vendor_header'));
@@ -316,7 +317,7 @@ gulp.task('run_server', function (done) {
     done();
 });
 
-gulp.task('default', gulp.series('clean_dev', 'pug', 'minhtml', 'move_files', 'scss_vendor_header', 'scss_vendor_footer', 'scss_header', 'scss_footer', 'js_vendor_header', 'js_vendor_footer', 'js_header', 'js_footer', 'imagemin', 'ewebp', 'run_server'));
+gulp.task('default', gulp.series('clean_dev', /* 'pug' ,*/ 'minhtml', 'move_files', 'scss_vendor_header', 'scss_vendor_footer', 'scss_header', 'scss_footer', 'js_vendor_header', 'js_vendor_footer', 'js_header', 'js_footer', 'imagemin', 'ewebp', 'run_server'));
 
 
 
