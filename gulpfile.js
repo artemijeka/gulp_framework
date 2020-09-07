@@ -278,7 +278,7 @@ gulp.task('imagemin', function () {
     return gulp.src(SRC.IMAGES)
         .pipe(imagemin([
             pngquant({ quality: [0.89, 0.91] }),
-            mozjpeg({ quality: 81 })
+            mozjpeg({ quality: 85 })
         ]))
         .pipe(gulp.dest(DEV.IMAGES))
 });
@@ -290,7 +290,7 @@ gulp.task("ewebp", function () {
         .pipe(
             imagemin([
                 webp({
-                    quality: 81
+                    quality: 85
                 })
             ]))
         .pipe(extReplace(".webp"))
