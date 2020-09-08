@@ -2,4 +2,14 @@
 
 node --version
 npm --version
-sudo npm install gulp --save-dev
+npm install gulp
+npm install -D
+npm audit
+npm audit fix
+npm rebuild node-sass
+
+
+npm install gulp-sass
+npm install gulp-pug
+npm install gulp-htmlmin
+npm install gulp-clean

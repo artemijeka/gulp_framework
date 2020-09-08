@@ -16,6 +16,7 @@ h6 {
 //buttons not border, background, outline
 button {
   background-color: transparent;
+  outline: none;
   border: none;
 }
 button::-moz-focus-inner,
