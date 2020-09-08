@@ -31,8 +31,8 @@ const SRC = {
         HEADER: './src/js/header/*.js',
         FOOTER: './src/js/footer/*.js',
         VENDOR: {
-            HEADER: './src/js/header/vendor/*.js',
-            FOOTER: './src/js/footer/vendor/*.js',
+            HEADER: './src/js/vendor/header/*.js',
+            FOOTER: './src/js/vendor/footer/*.js',
         },
     },
 };
