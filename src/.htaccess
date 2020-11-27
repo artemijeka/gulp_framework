@@ -1,3 +1,13 @@
+# Do not remove this line or mod_rewrite rules and search engine friendly URLs will stop working
+RewriteBase /
+RewriteEngine On
+
+# Редирект с http на https
+RewriteCond %{SERVER_PORT} !^443$
+RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
+
+
+
 ### https://github.com/agragregra/OptimizedHTML-5/blob/master/app/ht.access ###
 <ifModule mod_expires.c>
 
