@@ -1,4 +1,8 @@
 //buttons not border, background, outline
+* {
+  box-sizing: border-box;
+}
+
 button {
   background-color: transparent;
   outline: none;

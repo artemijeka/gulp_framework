@@ -5,5 +5,3 @@ npm --version
 
 npm install -D
 npm audit fix
-
-npm install normalize.css -D
