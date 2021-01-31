@@ -39,7 +39,7 @@ const CONFIG = {
 const SRC = {
     FILES: [
         './src/*.*', 
-        './src/**/*.+(eot|svg|ttf|woff|woff2)', 
+        './src/**/*.+(eot|svg|ttf|woff|woff2|mp4)', 
         './src/**/.htaccess',
         '!./src/**/*.html', 
         '!./src/**/*.pug', 
@@ -270,7 +270,7 @@ gulp.task('js_vendor_footer', function () {
             presets: ['@babel/env']
         }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify())
+        .pipe(uglify({}))
         .pipe(gulp.dest(DEV.JS.VENDOR));
 });
 
@@ -322,7 +322,7 @@ gulp.task('imagemin', function () {
     return gulp.src(SRC.IMAGES)
         .pipe(imagemin([
             pngquant({ quality: [0.89, 0.91] }),
-            mozjpeg({ quality: 99 })
+            mozjpeg({ quality: 90 })
         ]))
         .pipe(gulp.dest(DEV.IMAGES))
 });
@@ -335,7 +335,7 @@ gulp.task("ewebp", function () {
         .pipe(
             imagemin([
                 webp({
-                    quality: 99
+                    quality: 90
                 })
             ]))
         .pipe(extReplace(".webp"))
