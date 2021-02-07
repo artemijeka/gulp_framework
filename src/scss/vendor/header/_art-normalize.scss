@@ -3,15 +3,18 @@
   box-sizing: border-box;
 }
 
+
 button {
   background-color: transparent;
   outline: none;
   border: none;
 }
+
 button::-moz-focus-inner,
+a:focus,
 a {
-  border: 0 !important;
-  outline: none!important;
+  border: 0;
+  outline: none;
 }
 
 
@@ -22,10 +25,17 @@ input:-moz-placeholder           {opacity: 1;}/* Firefox 18- */
 input:-ms-input-placeholder      {opacity: 1;}
 
 
+input[type=submit] {
+  border: none;
+}
+
+
 //delete arrows on input type=number
 input[type='number'] {
   -moz-appearance:textfield;
 }
+
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
