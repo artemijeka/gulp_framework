@@ -72,31 +72,31 @@ const SRC = {
     },
 };
 
+const DEV_ROOT = './dev.loc/';
 const DEV = {
-    ROOT: './dev/',
     FILES: [
-        './dev/*.*',
-        './dev/fonts/**/*',
-        './dev/**/img/**/*.*',
-        './dev/**/.htaccess',
-        './dev/**/*.html',
+        DEV_ROOT + '*.*',
+        DEV_ROOT + 'fonts/**/*',
+        DEV_ROOT + '**/img/**/*.*',
+        DEV_ROOT + '**/.htaccess',
+        DEV_ROOT + '**/*.html',
         // './src/**/*.php',
         // './src/**/*.settings'
     ],
     // HTML: './dev/**/*.html',
     CSS: {
-        ROOT: './dev/css/',
-        VENDOR: './dev/css/vendor/',
-        HEADER: ['./dev/css/vendor/header.min.css', './dev/css/header.min.css'],
-        FOOTER: ['./dev/css/vendor/footer.min.css', './dev/css/footer.min.css'],
+        ROOT: DEV_ROOT + 'css/',
+        VENDOR: DEV_ROOT + 'css/vendor/',
+        HEADER: [DEV_ROOT + 'css/vendor/header.min.css', DEV_ROOT + 'css/header.min.css'],
+        FOOTER: [DEV_ROOT + 'css/vendor/footer.min.css', DEV_ROOT + 'css/footer.min.css'],
     },
     JS: {
-        ROOT: './dev/js/',
-        VENDOR: './dev/js/vendor/',
-        HEADER: ['./dev/js/vendor/header.min.js', './dev/js/header.min.js'],
-        FOOTER: ['./dev/js/vendor/footer.min.js', './dev/js/footer.min.js'],
+        ROOT: DEV_ROOT + 'js/',
+        VENDOR: DEV_ROOT + 'js/vendor/',
+        HEADER: [DEV_ROOT + 'js/vendor/header.min.js', DEV_ROOT + 'js/header.min.js'],
+        FOOTER: [DEV_ROOT + 'js/vendor/footer.min.js', DEV_ROOT + 'js/footer.min.js'],
     },
-    IMAGES: './dev/img/',
+    IMAGES: DEV_ROOT + 'img/',
     // FONTS: ['./dev/fonts/'],
 };
 
@@ -114,7 +114,7 @@ const DIST = {
 
 gulp.task('clean_dev', function () {
     //сначала очистка
-    return gulp.src(DEV.ROOT, { read: true, allowEmpty: true })
+    return gulp.src(DEV_ROOT, { read: true, allowEmpty: true })
         .pipe(clean());
 });
 
@@ -122,7 +122,7 @@ gulp.task('clean_dev', function () {
 
 gulp.task('move_files', function () {
     return gulp.src(SRC.FILES)
-        .pipe(gulp.dest(DEV.ROOT));
+        .pipe(gulp.dest(DEV_ROOT));
 });
 
 
@@ -130,7 +130,7 @@ gulp.task('move_files', function () {
 gulp.task('pug', function () {
     return gulp.src(SRC.PUG)
         .pipe(pug({pretty: '\t'}))
-        .pipe(gulp.dest(DEV.ROOT))
+        .pipe(gulp.dest(DEV_ROOT))
         .pipe(browserSync.stream());
 });
 
@@ -143,14 +143,14 @@ gulp.task('minhtml', function () {
                 collapseWhitespace: true,
                 removeComments: true
             }))
-            .pipe(gulp.dest(DEV.ROOT))            
+            .pipe(gulp.dest(DEV_ROOT))            
             .pipe(browserSync.stream());
 });
 
 // Gulp task to trans HTML files
 gulp.task('html', function () {
     return gulp.src(SRC.HTML)
-            .pipe(gulp.dest(DEV.ROOT))
+            .pipe(gulp.dest(DEV_ROOT))
             .pipe(browserSync.stream());
 });
 
@@ -349,7 +349,7 @@ gulp.task("ewebp", function () {
 // Static Server + watching scss/html files
 gulp.task('run_server', function (done) {
     browserSync.init({ // browser sync
-        server: DEV.ROOT
+        server: DEV_ROOT
     });
     gulp.watch(SRC.HTML, gulp.series(CONFIG.HTML.TYPE));//'html' || 'minhtml'
     // gulp.watch(SRC.PUG, gulp.series('pug'));
