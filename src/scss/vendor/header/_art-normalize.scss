@@ -1,7 +1,6 @@
 //buttons not border, background, outline
 * {
   box-sizing: border-box;
-  line-height: 1em;
 }
 
 
@@ -15,7 +14,9 @@ button::-moz-focus-inner,
 a:focus,
 a {
   border: 0;
+  outline: 0;
   outline: none;
+  outline: unset;
 }
 
 
