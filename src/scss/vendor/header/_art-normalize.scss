@@ -1,6 +1,7 @@
 //buttons not border, background, outline
 * {
   box-sizing: border-box;
+  line-height: 1em;
 }
 
 
@@ -14,11 +15,8 @@ button::-moz-focus-inner,
 a:focus,
 a {
   border: 0;
-  outline: 0;
   outline: none;
-  outline: unset;
 }
-
 
 //input placeholder not transparent
 input::-webkit-input-placeholder {opacity: 1;}
@@ -26,19 +24,20 @@ input::-moz-placeholder          {opacity: 1;}/* Firefox 19+ */
 input:-moz-placeholder           {opacity: 1;}/* Firefox 18- */
 input:-ms-input-placeholder      {opacity: 1;}
 
-
 input[type=submit] {
   border: none;
 }
-
 
 //delete arrows on input type=number
 input[type='number'] {
   -moz-appearance:textfield;
 }
 
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
+}
+
+mark {
+  background-color: transparent;
 }
