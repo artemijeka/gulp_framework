@@ -26,15 +26,15 @@ var DEV = {
     // HTML: './dev/**/*.html',
     CSS: {
         ROOT: DEV_ROOT + 'css/',
-        VENDOR: DEV_ROOT + 'css/vendor/',
-        HEADER: [DEV_ROOT + 'css/vendor/header.min.css', DEV_ROOT + 'css/header.min.css'],
-        FOOTER: [DEV_ROOT + 'css/vendor/footer.min.css', DEV_ROOT + 'css/footer.min.css'],
+        LIBS: DEV_ROOT + 'css/libs/',
+        HEADER: [DEV_ROOT + 'css/libs/header.min.css', DEV_ROOT + 'css/header.min.css'],
+        FOOTER: [DEV_ROOT + 'css/libs/footer.min.css', DEV_ROOT + 'css/footer.min.css'],
     },
     JS: {
         ROOT: DEV_ROOT + 'js/',
-        VENDOR: DEV_ROOT + 'js/vendor/',
-        HEADER: [DEV_ROOT + 'js/vendor/header.min.js', DEV_ROOT + 'js/header.min.js'],
-        FOOTER: [DEV_ROOT + 'js/vendor/footer.min.js', DEV_ROOT + 'js/footer.min.js'],
+        LIBS: DEV_ROOT + 'js/libs/',
+        HEADER: [DEV_ROOT + 'js/libs/header.min.js', DEV_ROOT + 'js/header.min.js'],
+        FOOTER: [DEV_ROOT + 'js/libs/footer.min.js', DEV_ROOT + 'js/footer.min.js'],
     },
     IMAGES: DEV_ROOT + 'img/',
     // FONTS: ['./dev/fonts/'],
@@ -60,18 +60,18 @@ var SRC = {
     IMAGES: './src/img/**/*.+(ico|svg|png|jpg|gif|webp)',
     SCSS: {
         HEADER: ['./src/scss/header/**/*.scss'],
-        VENDOR: {
-            HEADER: ['./src/scss/vendor/header/**/*.scss'],
-            FOOTER: ['./src/scss/vendor/footer/**/*.scss'],
+        LIBS: {
+            HEADER: ['./src/scss/libs/header/**/*.scss'],
+            FOOTER: ['./src/scss/libs/footer/**/*.scss'],
         },
         FOOTER: ['./src/scss/footer/**/*.scss'],
     },
     JS: {
         HEADER: './src/js/header/*.js',
         FOOTER: './src/js/footer/*.js',
-        VENDOR: {
-            HEADER: './src/js/vendor/header/*.js',
-            FOOTER: './src/js/vendor/footer/*.js',
+        LIBS: {
+            HEADER: './src/js/libs/header/*.js',
+            FOOTER: './src/js/libs/footer/*.js',
         },
     },
 };
@@ -212,66 +212,66 @@ gulp.task('scss_footer', function () {
 
 
 
-gulp.task('scss_vendor_header', function () {
+gulp.task('scss_libs_header', function () {
     //сначала очистка
-    gulp.src(DEV.CSS.VENDOR + 'header.min.css', { read: true, allowEmpty: true })
+    gulp.src(DEV.CSS.LIBS + 'header.min.css', { read: true, allowEmpty: true })
         .pipe(clean());
 
-    return gulp.src(SRC.SCSS.VENDOR.HEADER)
+    return gulp.src(SRC.SCSS.LIBS.HEADER)
         .pipe(scss())
         .pipe(concat('header.css'))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(DEV.CSS.VENDOR))
+        .pipe(gulp.dest(DEV.CSS.LIBS))
         .pipe(browserSync.stream());
 });
 
 
 
-gulp.task('scss_vendor_footer', function () {
+gulp.task('scss_libs_footer', function () {
     //сначала очистка
-    gulp.src(DEV.CSS.VENDOR + 'footer.min.css', { read: true, allowEmpty: true })
+    gulp.src(DEV.CSS.LIBS + 'footer.min.css', { read: true, allowEmpty: true })
         .pipe(clean());
 
-    return gulp.src(SRC.SCSS.VENDOR.FOOTER, { allowEmpty: true })
+    return gulp.src(SRC.SCSS.LIBS.FOOTER, { allowEmpty: true })
         .pipe(scss())
         .pipe(concat('footer.css'))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(gulp.dest(DEV.CSS.VENDOR))
+        .pipe(gulp.dest(DEV.CSS.LIBS))
         .pipe(browserSync.stream());
 });
 
 
 
-gulp.task('js_vendor_header', function () {
+gulp.task('js_libs_header', function () {
     //сначала очистка
-    gulp.src(DEV.JS.VENDOR + 'header.min.js', { read: false, allowEmpty: true })
+    gulp.src(DEV.JS.LIBS + 'header.min.js', { read: false, allowEmpty: true })
         .pipe(clean());
 
-    return gulp.src(SRC.JS.VENDOR.HEADER, { allowEmpty: true })
+    return gulp.src(SRC.JS.LIBS.HEADER, { allowEmpty: true })
         .pipe(concat('header.js'))
         .pipe(babel({
             presets: ['@babel/env']
         }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(uglify())
-        .pipe(gulp.dest(DEV.JS.VENDOR));
+        .pipe(gulp.dest(DEV.JS.LIBS));
 });
 
 
 
-gulp.task('js_vendor_footer', function () {
+gulp.task('js_libs_footer', function () {
     //сначала очистка
-    gulp.src(DEV.JS.VENDOR + 'footer.min.js', { read: false, allowEmpty: true })
+    gulp.src(DEV.JS.LIBS + 'footer.min.js', { read: false, allowEmpty: true })
         .pipe(clean());
 
-    return gulp.src(SRC.JS.VENDOR.FOOTER, { allowEmpty: true })
+    return gulp.src(SRC.JS.LIBS.FOOTER, { allowEmpty: true })
         .pipe(concat('footer.js'))
         .pipe(babel({
             presets: ['@babel/env']
         }))
         .pipe(rename({ suffix: '.min' }))
         .pipe(uglify({}))
-        .pipe(gulp.dest(DEV.JS.VENDOR));
+        .pipe(gulp.dest(DEV.JS.LIBS));
 });
 
 
@@ -353,10 +353,10 @@ gulp.task('run_dev_server', function (done) {
     // gulp.watch(SRC.PUG, gulp.series('pug'));
     gulp.watch(SRC.SCSS.HEADER, gulp.series('scss_header'));
     gulp.watch(SRC.SCSS.FOOTER, gulp.series('scss_footer'));
-    gulp.watch(SRC.SCSS.VENDOR.HEADER, gulp.series('scss_vendor_header'));
-    gulp.watch(SRC.SCSS.VENDOR.FOOTER, gulp.series('scss_vendor_footer'));
-    gulp.watch(SRC.JS.VENDOR.HEADER, gulp.series('js_vendor_header'));
-    gulp.watch(SRC.JS.VENDOR.FOOTER, gulp.series('js_vendor_footer'));
+    gulp.watch(SRC.SCSS.LIBS.HEADER, gulp.series('scss_libs_header'));
+    gulp.watch(SRC.SCSS.LIBS.FOOTER, gulp.series('scss_libs_footer'));
+    gulp.watch(SRC.JS.LIBS.HEADER, gulp.series('js_libs_header'));
+    gulp.watch(SRC.JS.LIBS.FOOTER, gulp.series('js_libs_footer'));
     gulp.watch(SRC.JS.HEADER, gulp.series('js_header'));
     gulp.watch(SRC.JS.FOOTER, gulp.series('js_footer'));
     if (CONFIG.MOVE_FILES) { gulp.watch(SRC.FILES, gulp.series('move_files')); }
@@ -371,7 +371,7 @@ gulp.task('plug', function () {
 
 
 
-gulp.task( 'default', gulp.series( ((CONFIG.CLEAN_DEV)?'clean_dev':'plug'), ((CONFIG.PUG)?'pug':'plug'), ((CONFIG.HTML_MIN)?'minhtml':'html'), ((CONFIG.MOVE_FILES)?'move_files':'plug'), 'scss_vendor_header', 'scss_vendor_footer', 'scss_header', 'scss_footer', 'js_vendor_header', 'js_vendor_footer', 'js_header', 'js_footer', 'imagemin', 'ewebp', 'run_dev_server' ) );
+gulp.task( 'default', gulp.series( ((CONFIG.CLEAN_DEV)?'clean_dev':'plug'), ((CONFIG.PUG)?'pug':'plug'), ((CONFIG.HTML_MIN)?'minhtml':'html'), ((CONFIG.MOVE_FILES)?'move_files':'plug'), 'scss_libs_header', 'scss_libs_footer', 'scss_header', 'scss_footer', 'js_libs_header', 'js_libs_footer', 'js_header', 'js_footer', 'imagemin', 'ewebp', 'run_dev_server' ) );
 
 
 
