@@ -3,8 +3,8 @@
 
 
 var CONFIG = {
-    'MOVE_FILES': false,
-    'CLEAN_DEV': false,
+    'MOVE_FILES': true,
+    'CLEAN_DEV': true,
     'HTML_MIN': false,
     'PUG': false,
     'AUTOPREFIXER': ['last 10 version', 'safari 5', 'ie 8', 'ie 9', 'ie 10', 'opera 12.1', 'ios 6', 'android 4'],//['last 10 versions']
@@ -16,7 +16,7 @@ var DEV_ROOT = './dev.loc/'
 var DEV = {
     FILES: [
         DEV_ROOT + '*.*',
-        DEV_ROOT + 'fonts/**/*',
+        DEV_ROOT + 'font/**/*',
         DEV_ROOT + '**/img/**/*.*',
         DEV_ROOT + '**/.htaccess',
         DEV_ROOT + '**/*.html',
@@ -37,7 +37,7 @@ var DEV = {
         FOOTER: [DEV_ROOT + 'js/libs/footer.min.js', DEV_ROOT + 'js/footer.min.js'],
     },
     IMAGES: DEV_ROOT + 'img/',
-    // FONTS: ['./dev/fonts/'],
+    FONT: [DEV_ROOT +'font/'],
 };
 
 var SRC = {
@@ -56,7 +56,7 @@ var SRC = {
     HTML: [
         './src/**/*.html'
     ],
-    // FONTS: ['./src/fonts/*'],
+    FONT: ['./src/font/*'],
     IMAGES: './src/img/**/*.+(ico|svg|png|jpg|gif|webp)',
     SCSS: {
         HEADER: ['./src/scss/header/**/*.scss'],
@@ -220,6 +220,10 @@ gulp.task('scss_libs_header', function () {
     return gulp.src(SRC.SCSS.LIBS.HEADER)
         .pipe(scss())
         .pipe(concat('header.css'))
+        .pipe(cleanCss({ 
+            compatibility: 'ie8',
+            level: { 1: { specialComments: 0 } },/* format: 'beautify' */ 
+        })) // Минификация css 
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(DEV.CSS.LIBS))
         .pipe(browserSync.stream());
@@ -235,6 +239,7 @@ gulp.task('scss_libs_footer', function () {
     return gulp.src(SRC.SCSS.LIBS.FOOTER, { allowEmpty: true })
         .pipe(scss())
         .pipe(concat('footer.css'))
+        .pipe(cleanCss())// Минификация css 
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(DEV.CSS.LIBS))
         .pipe(browserSync.stream());
