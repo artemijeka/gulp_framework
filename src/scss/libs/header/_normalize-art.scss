@@ -4,6 +4,14 @@
   line-height: 1em;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
+body {
+  overflow-y: hidden;
+}
 
 button {
   background-color: transparent;

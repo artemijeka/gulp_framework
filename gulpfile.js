@@ -220,10 +220,6 @@ gulp.task('scss_libs_header', function () {
     return gulp.src(SRC.SCSS.LIBS.HEADER)
         .pipe(scss())
         .pipe(concat('header.css'))
-        .pipe(cleanCss({ 
-            compatibility: 'ie8',
-            level: { 1: { specialComments: 0 } },/* format: 'beautify' */ 
-        })) // Минификация css 
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(DEV.CSS.LIBS))
         .pipe(browserSync.stream());
@@ -239,7 +235,6 @@ gulp.task('scss_libs_footer', function () {
     return gulp.src(SRC.SCSS.LIBS.FOOTER, { allowEmpty: true })
         .pipe(scss())
         .pipe(concat('footer.css'))
-        .pipe(cleanCss())// Минификация css 
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(DEV.CSS.LIBS))
         .pipe(browserSync.stream());
@@ -254,11 +249,8 @@ gulp.task('js_libs_header', function () {
 
     return gulp.src(SRC.JS.LIBS.HEADER, { allowEmpty: true })
         .pipe(concat('header.js'))
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(gulp.dest(DEV.JS.LIBS));
 });
 
@@ -271,11 +263,8 @@ gulp.task('js_libs_footer', function () {
 
     return gulp.src(SRC.JS.LIBS.FOOTER, { allowEmpty: true })
         .pipe(concat('footer.js'))
-        .pipe(babel({
-            presets: ['@babel/env']
-        }))
         .pipe(rename({ suffix: '.min' }))
-        .pipe(uglify({}))
+        // .pipe(uglify({}))
         .pipe(gulp.dest(DEV.JS.LIBS));
 });
 
