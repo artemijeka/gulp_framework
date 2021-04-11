@@ -2,9 +2,10 @@
 ---
 
 ### work.artem.kuznecov.samara@yandex.ru
-### 89608175048
 ---
 
+### https://github.com/nodesource/distributions/blob/master/README.md
+### (unix): 
   `sudo apt install curl`  
   `curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -`  
   `sudo apt install -y nodejs`  
@@ -26,3 +27,9 @@
   npm i
 ```
 ---
+
+### (windows):  
+  ***install nodejs***   
+  ## https://nodejs.org/en/download/
+  ***PowerShell command:***  
+    `npm i`  
