@@ -6,16 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/artemijeka/test_up_belpromstandart.git"
-  },
   "author": "Artem Kuznecov",
+  "author-site": "web.master-artem.ru",
+  "author-email": "work.artem.kuznecov.samara@yandex.ru",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/artemijeka/test_up_belpromstandart/issues"
-  },
-  "homepage": "https://github.com/artemijeka/test_up_belpromstandart#readme",
   "devDependencies": {
     "@babel/core": "^7.8.4",
     "@babel/preset-env": "^7.8.4",
