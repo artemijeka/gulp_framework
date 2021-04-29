@@ -58,6 +58,7 @@ var SRC = {
     ],
     FONT: ['./src/font/*'],
     IMAGES: './src/img/**/*.+(ico|svg|png|jpg|gif|webp)',
+    IMAGES_JPG_PNG: './src/img/**/*.+(png|jpg|jpeg|webp)',
     SCSS: {
         HEADER: ['./src/scss/header/**/*.scss'],
         LIBS: {
@@ -325,7 +326,7 @@ gulp.task('imagemin', function () {
 
 // export to webp
 gulp.task("ewebp", function () {
-    return gulp.src(SRC.IMAGES)
+    return gulp.src(SRC.IMAGES_JPG_PNG)
         .pipe(
             imagemin([
                 webp({
