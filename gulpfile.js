@@ -2,7 +2,7 @@
 
 
 
-var CONFIG = {
+const CONFIG = {
     'MOVE_FILES': true,
     'CLEAN_DEV': true,
     'HTML_MIN': false,
@@ -12,8 +12,8 @@ var CONFIG = {
 
 
 
-var DEV_ROOT = './dev.loc/'
-var DEV = {
+const DEV_ROOT = './dev.loc/'
+const DEV = {
     FILES: [
         DEV_ROOT + '*.*',
         DEV_ROOT + 'font/**/*',
@@ -40,7 +40,7 @@ var DEV = {
     FONT: [DEV_ROOT +'font/'],
 };
 
-var SRC = {
+const SRC = {
     FILES: [
         './src/*.*',
         './src/**/*.+(eot|svg|ttf|woff|woff2|mp4)',
@@ -57,7 +57,7 @@ var SRC = {
         './src/**/*.html'
     ],
     FONT: ['./src/font/*'],
-    IMAGES: './src/img/**/*.+(ico|svg|png|jpg|gif|webp)',
+    IMAGES_ALL: './src/img/**/*.+(ico|svg|png|jpg|gif|webp)',
     IMAGES_JPG_PNG: './src/img/**/*.+(png|jpg|jpeg|webp)',
     SCSS: {
         HEADER: ['./src/scss/header/**/*.scss'],
@@ -78,7 +78,7 @@ var SRC = {
 };
 
 /* PRODACTION TO DIST */
-var DIST = {
+const DIST = {
     ROOT: './dist/',
     CSS: './dist/css/',
     JS: './dist/js/'
@@ -86,32 +86,32 @@ var DIST = {
 
 
 
-var gulp = require('gulp'),
-    // ftp = require('vinyl-ftp'),
-    // gutil = require('gulp-util'),
-    browserSync = require('browser-sync'),
-    // pug = require('gulp-pug'),
-    htmlmin = require('gulp-htmlmin'),
-    clean = require('gulp-clean'),
-    scss = require('gulp-dart-sass'),
-    autoprefixer = require('gulp-autoprefixer'),
-    cleanCss = require('gulp-clean-css'),
-    rename = require('gulp-rename'),
-    concat = require('gulp-concat'),
-    babel = require('gulp-babel'),
-    imagemin = require('gulp-imagemin'),
-    pngquant = require('imagemin-pngquant'),
-    mozjpeg = require('imagemin-mozjpeg'),
-    webp = require('imagemin-webp'),
-    extReplace = require("gulp-ext-replace"),
-    // ggcmq = require('gulp-group-css-media-queries'),
-    // gcmq = require('gulp-combine-media-queries'),
-    // // cmq = require('gulp-combine-media-queries'),
-    // postcss = require('gulp-postcss'),
-    // sourcemaps = require('gulp-sourcemaps'),
-    // responsive = require('gulp-responsive'),//https://www.npmjs.com/package/gulp-responsive
-    uglify = require('gulp-uglify-es').default;
-// $ = require('gulp-load-plugins')();
+const gulp = require('gulp'),
+        // ftp = require('vinyl-ftp'),
+        // gutil = require('gulp-util'),
+        browserSync = require('browser-sync'),
+        // pug = require('gulp-pug'),
+        htmlmin = require('gulp-htmlmin'),
+        clean = require('gulp-clean'),
+        scss = require('gulp-dart-sass'),
+        autoprefixer = require('gulp-autoprefixer'),
+        cleanCss = require('gulp-clean-css'),
+        rename = require('gulp-rename'),
+        concat = require('gulp-concat'),
+        babel = require('gulp-babel'),
+        imagemin = require('gulp-imagemin'),
+        pngquant = require('imagemin-pngquant'),
+        mozjpeg = require('imagemin-mozjpeg'),
+        webp = require('imagemin-webp'),
+        extReplace = require("gulp-ext-replace"),
+        // ggcmq = require('gulp-group-css-media-queries'),
+        // gcmq = require('gulp-combine-media-queries'),
+        // // cmq = require('gulp-combine-media-queries'),
+        // postcss = require('gulp-postcss'),
+        // sourcemaps = require('gulp-sourcemaps'),
+        // responsive = require('gulp-responsive'),//https://www.npmjs.com/package/gulp-responsive
+        uglify = require('gulp-uglify-es').default;
+        // $ = require('gulp-load-plugins')();
 
 
 
@@ -314,7 +314,7 @@ gulp.task('js_footer', function () {
 
 
 gulp.task('imagemin', function () {
-    return gulp.src(SRC.IMAGES)
+    return gulp.src(SRC.IMAGES_ALL)
         .pipe(imagemin([
             pngquant({ quality: [0.89, 0.91] }),
             mozjpeg({ quality: 90 })
