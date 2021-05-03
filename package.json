@@ -31,7 +31,8 @@
     "imagemin-pngquant": "^8.0.0",
     "imagemin-webp": "^5.1.0",
     "install": "^0.13.0",
-    "mocha": "^8.2.1"
+    "mocha": "^8.2.1",
+    "swiper": "^6.5.9"
   },
   "dependencies": {
     "gulp-uglify-es": "^2.0.0"
