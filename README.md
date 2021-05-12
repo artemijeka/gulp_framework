@@ -1,44 +1,50 @@
 # install gulp guide
 
 ### work.artem.kuznecov.samara@yandex.ru
+### 89608175048
 
 ### https://github.com/nodesource/distributions/blob/master/README.md
 ---
 ### (unix): 
-  ***install nodejs and npm:*** 
-    `sudo apt install curl`  
-    `curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -`  
-    `sudo apt install -y nodejs`  
-    `sudo apt install -y npm`  
-    `node --version`
-    `npm --version`
-    `sudo apt autoremove` 
+  ***install nodejs and npm:***   
+    ```
+      sudo apt install curl  
+      curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -  
+      sudo apt install -y nodejs  
+      sudo apt install -y npm  
+      node --version
+      npm --version
+      sudo apt autoremove
+    ``` 
   ***install gulp:*** 
-    `npm i`  
-    `sudo npm i gulp -g`  
-    `gulp`
+    ```
+      npm i  
+      sudo npm i gulp -g 
+      gulp
+    ```
 
 ### (windows):  
   ***install nodejs and npm:***   
     [https://nodejs.org/en/download/](https://nodejs.org/en/download/)  
   ***install gulp:***  
-    `npm i` 
-    `npm i gulp -g`  
-    `gulp` 
+    ```
+      npm i 
+      npm i gulp -g  
+      gulp 
+    ```
 
----
 ### Ошибки:
-* **Если `gulp` не запускается, то:**  
-  ***Удалить***
+  **Если `gulp` не запускается, то:**  
+  ***Удалить:***
   ```
     node_modules
   ``` 
-  ***и переустановить***
+  ***и переустановить:***
   ```
     npm i
   ```
----
-* **Если `npm i` не устанавливается, то:**
+
+  **Если `npm i` не устанавливается, то:**
   ```
     # Update nodejs to latest version:
     sudo npm install -g n
@@ -48,8 +54,8 @@
     # Try npm install
     npm i
   ```
----
-* **Ошибка:** ```node-sass```
+
+  **Ошибка:** ```node-sass```
   ```
     gulp
     Error: Node Sass does not yet support your current environment: Linux 64-bit with Unsupported runtime (88)
