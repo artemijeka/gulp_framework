@@ -34,7 +34,7 @@
     ```
 
 ### Ошибки:
-  **Если `gulp` не запускается, то:**  
+  **Если ```gulp``` не запускается, то:**  
   ***Удалить:***
   ```
     node_modules
@@ -44,7 +44,7 @@
     npm i
   ```
 
-  **Если `npm i` не устанавливается, то:**
+  **Если ```npm i``` не устанавливается, то:**
   ```
     # Update nodejs to latest version:
     sudo npm install -g n
@@ -55,7 +55,7 @@
     npm i
   ```
 
-  **Ошибка:** ```node-sass```
+  **Ошибка: ```node-sass```** 
   ```
     gulp
     Error: Node Sass does not yet support your current environment: Linux 64-bit with Unsupported runtime (88)
