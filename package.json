@@ -9,6 +9,7 @@
   "author": "Artem Kuznecov",
   "author-site": "web.master-artem.ru",
   "author-email": "work.artem.kuznecov.samara@yandex.ru",
+  "author-phone": "89608175048",
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.8.4",
