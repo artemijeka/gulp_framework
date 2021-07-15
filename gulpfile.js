@@ -46,9 +46,9 @@ const SRC = {
         './src/*.*',
         './src/**/*.+(eot|svg|ttf|woff|woff2|mp4)',
         './src/**/.htaccess',
+        './src/**/*.php',
         '!./src/**/*.html',
         '!./src/**/*.pug',
-        './src/**/*.php',
         // './src/**/*.settings'
     ],
     PUG: [
