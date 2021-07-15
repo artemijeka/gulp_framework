@@ -1,7 +1,8 @@
 # install gulp guide
 
+### v2.0.0 15.07.2021
+
 ### work.artem.kuznecov.samara@yandex.ru
-### 89608175048
 
 ### https://github.com/nodesource/distributions/blob/master/README.md
 ---
@@ -9,7 +10,7 @@
   ***install nodejs and npm:***   
     ```
       sudo apt install curl  
-      curl -fsSL https://deb.nodesource.com/setup_15.x | sudo -E bash -  
+      curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -  
       sudo apt install -y nodejs  
       sudo apt install -y npm  
       node --version
