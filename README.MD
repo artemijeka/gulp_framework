@@ -7,7 +7,7 @@
 ### https://github.com/nodesource/distributions/blob/master/README.md
 ---
 ### (unix): 
-  ***install nodejs and npm:***   
+  **install nodejs and npm:**   
     ```
       sudo apt install curl  
       curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -  
@@ -17,7 +17,7 @@
       npm --version
       sudo apt autoremove
     ``` 
-  ***install gulp:*** 
+  **install gulp:** 
     ```
       npm i  
       sudo npm i gulp -g 
@@ -25,9 +25,9 @@
     ```
 
 ### (windows):  
-  ***install nodejs and npm:***   
+  **install nodejs and npm:**   
     [https://nodejs.org/en/download/](https://nodejs.org/en/download/)  
-  ***install gulp:***  
+  **install gulp:**  
     ```
       npm i 
       npm i gulp -g  
@@ -36,25 +36,25 @@
 
 ### Ошибки:
   **Если ```gulp``` не запускается, то:**  
-  ***Удалить:***
-  ```
-    node_modules
-  ``` 
-  ***и переустановить:***
-  ```
-    npm i
-  ```
+    *Удалить:*
+      ```
+        node_modules
+      ``` 
+    *и переустановить:*
+      ```
+        npm i
+      ```
 
   **Если ```npm i``` не устанавливается, то:**
-  ```
-    # Update nodejs to latest version:
-    sudo npm install -g n
-    sudo n latest
-    # Update npm to latest version:
-    sudo npm install -g npm
-    # Try npm install
-    npm i
-  ```
+    ```
+      # Update nodejs to latest version:
+      sudo npm install -g n
+      sudo n latest
+      # Update npm to latest version:
+      sudo npm install -g npm
+      # Try npm install
+      npm i
+    ```
 
   **Ошибка: ```node-sass```** 
   ```
@@ -65,15 +65,36 @@
     at module.exports (/home/common/git_work/mida.ru/node_modules/node-sass/lib/binding.js:13:13)
     at Object.<anonymous> (/home/common/git_work/mida.ru/node_modules/node-sass/lib/index.js:14:35)
   ```
-  ***Надо удалить:***
+  **Надо удалить:**
   ```
     npm uninstall gulp-sass -D
   ```
-  ***И устанвоить:***
+  **И устанвоить:**
   ```
     npm i gulp-dart-sass -D
   ```
-  ***gulpfile.js:***
+  **gulpfile.js:**
   ```
     scss = require('gulp-dart-sass')
   ```
+
+### browserslist
+  **docs: https://github.com/browserslist/browserslist**
+    *.browserslistrc:*
+      ```
+        # Browsers that we support
+        # defaults
+        # not dead
+        # > 1.6%
+        # ie 11
+      ```
+  **or**  
+    *package.json:*
+      ```
+        "browserslist": [
+          "defaults",
+          "not dead",
+          "> 1.6%",
+          "maintained node versions"
+        ],
+      ```
