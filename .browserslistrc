@@ -1,5 +1,6 @@
 # Browsers that we support
 defaults
 not dead
-> 0.5%
-ie 11
+> 1.6%
+#> 0.5%
+#ie 11

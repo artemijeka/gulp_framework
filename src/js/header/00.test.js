@@ -1,5 +1,12 @@
-async function adding(a,b) {
-  return a + b;
+async function wait() {
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  return 10;
 }
 
-adding(1,3).then(console.log('test'));
+function f() {
+  // покажет 10 через 1 секунду
+  wait().then(result => alert(result));
+}
+
+f();
